@@ -49,6 +49,7 @@ export class AssetsManager {
         appName,
       ) || [];
 
+      console.info('copyAssets #1 -', assets);
     if (assets.length <= 0) {
       return;
     }
@@ -56,14 +57,26 @@ export class AssetsManager {
     try {
       let sourceRoot = getValueOrDefault(configuration, 'sourceRoot', appName);
       sourceRoot = join(process.cwd(), sourceRoot);
+      console.info('copyAssets #2 -', sourceRoot, 'appName', appName);
 
       const filesToCopy = assets.map<AssetEntry>((item) => {
+        console.info('copyAssets #3 before -', {
+          glob: join(sourceRoot, item),
+          outDir,
+        });
         if (typeof item === 'string') {
           return {
             glob: join(sourceRoot, item),
             outDir,
           };
         }
+        console.info('copyAssets #3 in -', {
+          outDir: item.outDir || outDir,
+          glob: join(sourceRoot, item.include!),
+          exclude: item.exclude ? join(sourceRoot, item.exclude) : undefined,
+          flat: item.flat, // deprecated field
+          watchAssets: item.watchAssets,
+        });
         return {
           outDir: item.outDir || outDir,
           glob: join(sourceRoot, item.include!),
@@ -88,6 +101,7 @@ export class AssetsManager {
           sourceRoot,
           watchAssetsMode: isWatchEnabled,
         };
+      console.info('copyAssets #4 -', option);
 
         // prettier-ignore
         const watcher = chokidar
@@ -124,6 +138,7 @@ export class AssetsManager {
       sourceRoot.split(sep).length,
     );
 
+    console.info('actionOnFile - ', action, 'dest', dest, 'path', path);
     // Copy to output dir if file is changed or added
     if (action === 'change') {
       shell.mkdir('-p', dirname(dest));
