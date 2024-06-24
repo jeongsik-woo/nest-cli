@@ -60,11 +60,11 @@ export class AssetsManager {
       console.info('copyAssets #2 -', sourceRoot, 'appName', appName);
 
       const filesToCopy = assets.map<AssetEntry>((item) => {
-        console.info('copyAssets #3 before -', {
-          glob: join(sourceRoot, item),
-          outDir,
-        });
         if (typeof item === 'string') {
+          console.info('copyAssets #3 before -', {
+            glob: join(sourceRoot, item),
+            outDir,
+          });
           return {
             glob: join(sourceRoot, item),
             outDir,
