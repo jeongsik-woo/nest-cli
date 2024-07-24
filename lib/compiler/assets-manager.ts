@@ -51,6 +51,7 @@ export class AssetsManager {
         appName,
       ) || [];
 
+    console.info('DEBUG_LOG copyAssets', assets);
     if (assets.length <= 0) {
       return;
     }
@@ -58,6 +59,7 @@ export class AssetsManager {
     try {
       let sourceRoot = getValueOrDefault(configuration, 'sourceRoot', appName);
       sourceRoot = join(process.cwd(), sourceRoot);
+    console.info('DEBUG_LOG sourceRoot', sourceRoot);
 
       const filesToCopy = assets.map<AssetEntry>((item) => {
         if (typeof item === 'string') {
@@ -74,6 +76,7 @@ export class AssetsManager {
           watchAssets: item.watchAssets,
         };
       });
+      console.info('DEBUG_LOG filesToCopy', filesToCopy);
 
       const isWatchEnabled =
         getValueOrDefault<boolean>(
@@ -91,6 +94,7 @@ export class AssetsManager {
           watchAssetsMode: isWatchEnabled,
         };
 
+        console.info('DEBUG_LOG actionOnFile', option, 'item', item);
         if (isWatchEnabled || item.watchAssets) {
           // prettier-ignore
           const watcher = chokidar
